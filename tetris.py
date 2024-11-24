@@ -1,3 +1,9 @@
+'''
+Author: Nguyễn Thành Long practice with Copilot
+Date: 24-11-2024
+version: 1.0
+'''
+
 import pygame
 import random
 
