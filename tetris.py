@@ -13,110 +13,110 @@ block_size = 30
 top_left_x = (s_width - play_width) // 2
 top_left_y = s_height - play_height
 
-
+ver = '1.0'
 # SHAPE FORMATS
 
 S = [['.....',
-      '.....',
-      '..00.',
-      '.00..',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..00.',
-      '...0.',
-      '.....']]
+    '.....',
+    '..00.',
+    '.00..',
+    '.....'],
+    ['.....',
+    '..0..',
+    '..00.',
+    '...0.',
+    '.....']]
 
 Z = [['.....',
-      '.....',
-      '.00..',
-      '..00.',
-      '.....'],
-     ['.....',
-      '..0..',
-      '.00..',
-      '.0...',
-      '.....']]
+    '.....',
+    '.00..',
+    '..00.',
+    '.....'],
+    ['.....',
+    '..0..',
+    '.00..',
+    '.0...',
+    '.....']]
 
 I = [['..0..',
-      '..0..',
-      '..0..',
-      '..0..',
-      '.....'],
-     ['.....',
-      '0000.',
-      '.....',
-      '.....',
-      '.....']]
+    '..0..',
+    '..0..',
+    '..0..',
+    '.....'],
+    ['.....',
+    '0000.',
+    '.....',
+    '.....',
+    '.....']]
 
 O = [['.....',
-      '.....',
-      '.00..',
-      '.00..',
-      '.....']]
+    '.....',
+    '.00..',
+    '.00..',
+    '.....']]
 
 J = [['.....',
-      '.0...',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..00.',
-      '..0..',
-      '..0..',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '...0.',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..0..',
-      '.00..',
-      '.....']]
+    '.0...',
+    '.000.',
+    '.....',
+    '.....'],
+    ['.....',
+    '..00.',
+    '..0..',
+    '..0..',
+    '.....'],
+    ['.....',
+    '.....',
+    '.000.',
+    '...0.',
+    '.....'],
+    ['.....',
+    '..0..',
+    '..0..',
+    '.00..',
+    '.....']]
 
 L = [['.....',
-      '...0.',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..0..',
-      '..00.',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '.0...',
-      '.....'],
-     ['.....',
-      '.00..',
-      '..0..',
-      '..0..',
-      '.....']]
+    '...0.',
+    '.000.',
+    '.....',
+    '.....'],
+    ['.....',
+    '..0..',
+    '..0..',
+    '..00.',
+    '.....'],
+    ['.....',
+    '.....',
+    '.000.',
+    '.0...',
+    '.....'],
+    ['.....',
+    '.00..',
+    '..0..',
+    '..0..',
+    '.....']]
 
 T = [['.....',
-      '..0..',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..00.',
-      '..0..',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '..0..',
-      '.....'],
-     ['.....',
-      '..0..',
-      '.00..',
-      '..0..',
-      '.....']]
+    '..0..',
+    '.000.',
+    '.....',
+    '.....'],
+    ['.....',
+    '..0..',
+    '..00.',
+    '..0..',
+    '.....'],
+    ['.....',
+    '.....',
+    '.000.',
+    '..0..',
+    '.....'],
+    ['.....',
+    '..0..',
+    '.00..',
+    '..0..',
+    '.....']]
 
 shapes = [S, Z, I, O, J, L, T]
 shape_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
@@ -133,7 +133,6 @@ class Piece(object):
         self.color = shape_colors[shapes.index(shape)]
         self.rotation = 0  # number from 0-3
 
-
 def create_grid(locked_positions={}):
     grid = [[(0,0,0) for x in range(10)] for x in range(20)]
 
@@ -143,7 +142,6 @@ def create_grid(locked_positions={}):
                 c = locked_positions[(j,i)]
                 grid[i][j] = c
     return grid
-
 
 def convert_shape_format(shape):
     positions = []
@@ -160,7 +158,6 @@ def convert_shape_format(shape):
 
     return positions
 
-
 def valid_space(shape, grid):
     accepted_positions = [[(j, i) for j in range(10) if grid[i][j] == (0,0,0)] for i in range(20)]
     accepted_positions = [j for sub in accepted_positions for j in sub]
@@ -173,7 +170,6 @@ def valid_space(shape, grid):
 
     return True
 
-
 def check_lost(positions):
     for pos in positions:
         x, y = pos
@@ -181,19 +177,18 @@ def check_lost(positions):
             return True
     return False
 
-
 def get_shape():
     global shapes, shape_colors
 
     return Piece(5, 0, random.choice(shapes))
 
-
-def draw_text_middle(text, size, color, surface):
+def draw_text_middle(text, size, color, surface, scale_factor):
     font = pygame.font.SysFont('comicsans', size, bold=True)
     label = font.render(text, 1, color)
-
-    surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), top_left_y + play_height / 2 - label.get_height() / 2))
-
+    scaled_label = pygame.transform.scale(label, (int(label.get_width() * scale_factor), 
+                                                   int(label.get_height() * scale_factor)))   
+    surface.blit(scaled_label, (top_left_x + play_width / 2 - (scaled_label.get_width() / 2),
+                                top_left_y + play_height / 2 - scaled_label.get_height() / 2))
 
 def draw_grid(surface, row, col):
     sx = top_left_x
@@ -202,7 +197,6 @@ def draw_grid(surface, row, col):
         pygame.draw.line(surface, (128,128,128), (sx, sy+ i*30), (sx + play_width, sy + i * 30))  # horizontal lines
         for j in range(col):
             pygame.draw.line(surface, (128,128,128), (sx + j * 30, sy), (sx + j * 30, sy + play_height))  # vertical lines
-
 
 def clear_rows(grid, locked):
     inc = 0
@@ -224,8 +218,6 @@ def clear_rows(grid, locked):
                 locked[new_key] = locked.pop(key)
     return inc 
 
-
-
 def draw_next_shape(shape, surface):
     font = pygame.font.SysFont('comicsans', 30)
     label = font.render('Next Shape', 1, (255,255,255))
@@ -241,7 +233,6 @@ def draw_next_shape(shape, surface):
                 pygame.draw.rect(surface, shape.color, (sx + j*30, sy + i*30, 30, 30), 0)
 
     surface.blit(label, (sx + 10, sy - 30))
-
 
 def draw_window(surface, score, level, grid):
     surface.fill((0, 0, 0))
@@ -267,6 +258,10 @@ def draw_window(surface, score, level, grid):
     # Draw grid and border
     draw_grid(surface, 20, 10)
     pygame.draw.rect(surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5)
+
+    # Draw version
+    version_label = font.render('ver ' + ver, 1, (255, 255, 255))
+    surface.blit(version_label, (s_width - version_label.get_width() - 10, s_height - version_label.get_height() - 10))
 
 
 def main():
@@ -308,26 +303,27 @@ def main():
                 run = False
                 pygame.display.quit()
                 quit()
+            # Tăng tốc khi ấn giữ nút S hoặc DOWN
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                current_piece.y += 1
+            if not (valid_space(current_piece, grid)) and current_piece.y > 0:
+                current_piece.y -= 1
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     current_piece.x -= 1
                     if not valid_space(current_piece, grid):
                         current_piece.x += 1
 
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     current_piece.x += 1
                     if not valid_space(current_piece, grid):
                         current_piece.x -= 1
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     current_piece.rotation = (current_piece.rotation + 1) % len(current_piece.shape)
                     if not valid_space(current_piece, grid):
                         current_piece.rotation = (current_piece.rotation - 1) % len(current_piece.shape)
-
-                if event.key == pygame.K_DOWN:
-                    current_piece.y += 1
-                    if not valid_space(current_piece, grid):
-                        current_piece.y -= 1
 
         shape_pos = convert_shape_format(current_piece)
 
@@ -355,25 +351,29 @@ def main():
         if check_lost(locked_positions):
             run = False
 
-    draw_text_middle("You Lost", 40, (255,255,255), win)
+    draw_text_middle("You Lost", 40, (255,255,255), win, 1)
     pygame.display.update()
     pygame.time.delay(2000)
 
-
 def main_menu():
+    scale_factor = 1  
+    scale_speed = 0.0002
     run = True
     while run:
         win.fill((0, 0, 0))
-        draw_text_middle('Press any key to begin.', 60, (255, 255, 255), win)
+        draw_text_middle('Press A key to begin.', 60, (255, 255, 255), win, scale_factor)
+        scale_factor += scale_speed
+        if scale_factor > 1.05 or scale_factor < 0.9:
+            scale_speed = -scale_speed
         pygame.display.update()
+        # Xử lý sự kiện
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
             if event.type == pygame.KEYDOWN:
-                main()
+                if event.key == pygame.K_a:
+                    main()
     pygame.quit()
-
 
 win = pygame.display.set_mode((s_width, s_height))
 pygame.display.set_caption('Tetris')
